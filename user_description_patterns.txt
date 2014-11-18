@@ -1,0 +1,36 @@
+#academia
+~description
+professor -.9
+university -.8 
+student -.9
+prof. -.9
+prof -.9
+school -.6
+research -.4
+researcher -.4
+institute -.3
+postdoc -.9
+phd -.3
+scientist -.3
+scholar-.5
+statistics -.2
+~url
+.edu -.8
+
+#industry
+~description
+programmer -.8
+cto -.9
+ceo -.9
+founder -.8
+phd -.3
+data scientist -.8
+data analyst -.8
+hadoop -.6
+big data -.4
+expert -.4
+manager -.5
+engineer -.5
+~url
+linkedin -.5
+

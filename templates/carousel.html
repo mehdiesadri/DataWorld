@@ -1,0 +1,44 @@
+<div id="myCarousel" class="carousel slide">
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        {% with list|first as t %}
+            {% with t.entities.media|first as m %}
+                <div class="item active">
+                    <div class="fill"
+                         style="background-image:url({{ m.media_url }}:large);"></div>
+                    <a href="http://twitter.com/{{ t.user.screen_name }}/status/{{ t.id }}" target="_blank">
+                        <div class="carousel-caption">
+                            <h3>{{ t.user.name }}</h3>
+
+                            <p>{{ t.text }} <b>({{ t.time }})</b></p>
+                        </div>
+                    </a>
+                </div>
+            {% endwith %}
+        {% endwith %}
+
+        {% for t in list|slice:limit %}
+            {% for m in t.entities.media %}
+                <div class="item">
+                    <div class="fill"
+                         style="background-image:url({{ m.media_url }}:large);"></div>
+                    <a href="http://twitter.com/{{ t.user.screen_name }}/status/{{ t.id }}" target="_blank">
+                        <div class="carousel-caption">
+                            <h3>{{ t.user.name }}</h3>
+
+                            <p>{{ t.text }} <b>({{ t.time }})</b></p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="icon-prev"></span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="icon-next"></span>
+    </a>
+</div>

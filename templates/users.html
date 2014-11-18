@@ -1,0 +1,53 @@
+{% include "header.html" with title=title %}
+
+<div class="section">
+    <div class="container">
+
+        <!-- Service Tabs -->
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                <h2 class="page-header">{{ title }}</h2>
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active"><a href="#service-one" data-toggle="tab">Academia</a>
+                    </li>
+                    <li><a href="#service-two" data-toggle="tab">Industry</a>
+                    </li>
+                    <li><a href="#service-three" data-toggle="tab">#Last Window Data Science Tweets</a>
+                    </li>
+                    <li><a href="#service-four" data-toggle="tab">#Total Data Science Tweets</a>
+                    </li>
+                    <li><a href="#service-five" data-toggle="tab">#Followers</a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="service-one">
+                        {% include "userlist.html" with list=u_academia title='Tweet Count' %}
+                    </div>
+                    <div class="tab-pane fade" id="service-two">
+                        {% include "userlist.html" with list=u_industry title='Tweet Count' %}
+                    </div>
+                    <div class="tab-pane fade" id="service-three">
+                        {% include "userlist.html" with list=u_w_count title='Tweet Count' %}
+                    </div>
+                    <div class="tab-pane fade" id="service-four">
+                        {% include "userlist.html" with list=u_count title='Tweet Count' %}
+                    </div>
+                    <div class="tab-pane fade" id="service-five">
+                        {% include "userlist.html" with list=u_follower_count title='Follower Count' %}
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+        </br></br><a href={% url 'index' %} type="button" class="btn btn-primary btn-lg"><span
+            class="glyphicon glyphicon-home"></span>{{ mappings.home }}</a>
+    </div>
+    <!-- /.container -->
+
+</div>
+<!-- /.section -->
+{% include "footer.html" %}

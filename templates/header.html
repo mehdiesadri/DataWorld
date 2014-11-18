@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="Mehdi Sadri" content="">
+    <meta HTTP-EQUIV="refresh" CONTENT="600">
+
+    <title>{{ title }}</title>
+
+    {% load static %}
+    <link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="{% static "css/modern-business.css" %}" rel="stylesheet">
+    <link href="{% static "font-awesome/css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/jqcloud.css" %}" rel="stylesheet">
+    <script src="{% static "js/jquery-1.10.2.js" %}"></script>
+    <script src="{% static "js/jqcloud-1.0.4.js" %}"></script>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-9870941-5', 'uci.edu');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <!-- You'll want to use a responsive image option so this logo looks good on devices - I recommend using something like retina.js (do a quick Google search for it and you'll find it) -->
+            <a class="navbar-brand" href={% url 'index' %}>DataWorld
+                <small class="text-info">beta</small>
+            </a>
+        </div>
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>

@@ -1,0 +1,23 @@
+<ul class="media-list">
+    {% for tweet in list|slice:limit %}
+        <li class="media">
+            <a class="pull-left"
+               href="http://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}"
+               target="_blank">
+                <img class="media-object" src="{{ tweet.user.profile_image_url }}" alt="..." height="48"
+                     width="48">
+            </a>
+
+            <div class="media-body">
+                <h4 class="media-heading">
+                    <a href="http://twitter.com/{{ tweet.user.screen_name }}" target="_blank">
+                        <b class="text-success">
+                            {{ tweet.user.name }}</b></a>
+
+                    </br> {{ tweet.text|safe }}
+                </h4>
+                ({{ tweet.time }}) Score: {{ tweet.score }}
+            </div>
+        </li>
+    {% endfor %}
+</ul>

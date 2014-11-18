@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    var word_array = [
+        {% for term, count in list.items %}
+            {text: "{{ term }}", weight: {{ count }}, link: {href: "{% url 'gt' term %}", target: "_blank"}, html: {title: "{{term}} : {{count}}"}},
+        {% endfor %}
+    ];
+
+    $(function () {
+        {#        $("#wordcloud").jQCloud(word_array, {shape: "rectangular"});#}
+        $("#wordcloud").jQCloud(word_array);
+    });
+</script>

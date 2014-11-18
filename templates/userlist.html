@@ -1,0 +1,33 @@
+<ul class="media-list">
+    {% for user in list %}
+        <li class="media">
+            <div class="btn-group-vertical pull-left">
+                <a type="button" class="btn btn-success btn-xs">
+                    <span class="glyphicon glyphicon-hand-up"></span>
+                </a>
+                <a type="button" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-hand-down"></span>
+                </a>
+            </div>
+
+            <a class='pull-left' href="http://twitter.com/{{ user.screen_name }}"
+               target="_blank">
+                <img class="media-object" src="{{ user.image_url }}"
+                     alt="..." height="48"
+                     width="48">
+            </a>
+
+            <div class="media-body">
+                <h4 class="media-heading">
+                    <a href="http://twitter.com/{{ user.screen_name }}" target="_blank">
+                        <b class="text-success">{{ user.name }}</b>
+                    </a>
+                    {% if user.description|length > 2 %}
+                        {{ ':' }}
+                    {% endif %}
+                    {{ user.description|safe }}</h4>
+                {{ title }} : {{ user.score }}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
