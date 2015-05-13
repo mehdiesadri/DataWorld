@@ -103,7 +103,7 @@ def htweets(request):
 
 def gtweets(request, query):
     title = 'Tweets: ' + query
-    tweets = tweetListGen.search_tweets(query, 1000)
+    tweets = tweetListGen.search_tweets(query, 500)
     # trend = get_term_trend(query)
     trend = {}
     t = get_template("tweets.html")

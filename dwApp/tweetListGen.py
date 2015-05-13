@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.gis.gdal import field
 
+from mongoengine.queryset.visitor import Q
 from dwApp.models import Tweet
 import dateutil.parser
 from datetime import datetime
@@ -15,13 +16,19 @@ def search_tweets(query, size):
     tweets = []
     tweet_ids = []
     query_parts = str(query).split(",")
-    tweets_temp = Tweet.objects().order_by('timestamp', '-status__favoriteCount','-status__retweetCount').filter(
-        status__text__icontains=str(query))[:size]
+    q = Q()
+    for qp in query_parts:
+        q = q & Q(status__text__icontains=str(qp).strip())
+
+    tweets_temp = Tweet.objects.filter(q).order_by('-timestamp', '-status__favoriteCount', '-status__retweetCount')[
+                  :size]
+
     for t in tweets_temp:
         if not tweet_ids.__contains__(t.status.id):
             tweet_time = t.timestamp
             t.status.time = utilities.what_time(long(tweet_time) / 1000)
             t.status.text = utilities.text_url_to_link(t.status.text)
+            t.status.score = t.status.favoriteCount + t.status.retweetCount
             tweets.append(t.status)
             tweet_ids.append(t.status.id)
 
