@@ -2,14 +2,13 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         {% with list|first as t %}
-            {% with t.entities.media|first as m %}
+            {% with t.mediaEntities|first as m %}
                 <div class="item active">
                     <div class="fill"
-                         style="background-image:url({{ m.media_url }}:large);"></div>
-                    <a href="http://twitter.com/{{ t.user.screen_name }}/status/{{ t.id }}" target="_blank">
+                         style="background-image:url({{ m.mediaURL }}:large);"></div>
+                    <a href="http://twitter.com/{{ t.user.screenName }}/status/{{ t.id }}" target="_blank">
                         <div class="carousel-caption">
                             <h3>{{ t.user.name }}</h3>
-
                             <p>{{ t.text }} <b>({{ t.time }})</b></p>
                         </div>
                     </a>
@@ -18,14 +17,13 @@
         {% endwith %}
 
         {% for t in list|slice:limit %}
-            {% for m in t.entities.media %}
+            {% for m in t.mediaEntities %}
                 <div class="item">
                     <div class="fill"
-                         style="background-image:url({{ m.media_url }}:large);"></div>
-                    <a href="http://twitter.com/{{ t.user.screen_name }}/status/{{ t.id }}" target="_blank">
+                         style="background-image:url({{ m.mediaURL }}:large);"></div>
+                    <a href="http://twitter.com/{{ t.user.screenName }}/status/{{ t.id }}" target="_blank">
                         <div class="carousel-caption">
                             <h3>{{ t.user.name }}</h3>
-
                             <p>{{ t.text }} <b>({{ t.time }})</b></p>
                         </div>
                     </a>

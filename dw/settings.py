@@ -57,26 +57,19 @@ ROOT_URLCONF = 'dw.urls'
 
 WSGI_APPLICATION = 'dw.wsgi.application'
 
+DATABASES = {
+    'default': {
+        'ENGINE': '',
+    }
+}
 
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 _MONGODB_NAME = 'dataworld'
 _MONGODB_HOST = 'sensoria.ics.uci.edu'
 _MONGODB_PORT = 27017
+# _MONGODB_USER = 'msadri'
+# _MONGODB_PASS = '1365918Ms2'
 
 mongoengine.connect(_MONGODB_NAME, host=_MONGODB_HOST, port=_MONGODB_PORT)
-
-DATABASES = {
-    'default': {},
-    'mysql': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dataworld',
-        'USER': 'mehdi',
-        'PASSWORD': '1365918',
-        'HOST': '128.195.52.58',
-        'PORT': 3306,
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
