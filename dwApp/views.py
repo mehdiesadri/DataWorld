@@ -37,19 +37,10 @@ def get_terms():
 
 
 def generate_user_lists(ucount):
-    u_count = userListGen.generate_users(ucount)
-
-    u_follower_count = User.objects.order_by('-userInfo__followersCount')[:ucount]
-    for user in u_follower_count:
-        user.score = user.userInfo.followersCount
-
+    u_count = userListGen.generate_most_active_users(ucount)
+    u_follower_count = userListGen.generate_most_followers_users(ucount)
     u_academia = userListGen.generate_influential_users_academia(ucount)
-    for user in u_academia:
-        user.score = user.statistics.relevantTweetCount.value
-
     u_industry = userListGen.generate_influential_users_industry(ucount)
-    for user in u_industry:
-        user.score = user.statistics.relevantTweetCount.value
 
     return u_academia, u_count, u_follower_count, u_industry
 

@@ -10,24 +10,23 @@
                 </a>
             </div>
 
-            <a class='pull-left' href="http://twitter.com/{{ user.userInfo.screenName }}"
+            <a class='pull-left' href="http://twitter.com/{{ user.screenName }}"
                target="_blank">
-                <img class="media-object" src="{{ user.userInfo.profileImageUrl }}"
+                <img class="media-object" src="{{ user.profileImageUrl }}"
                      alt="..." height="48"
                      width="48">
             </a>
 
             <div class="media-body">
                 <h4 class="media-heading">
-                    <a href="http://twitter.com/{{ user.userInfo.screenName }}" target="_blank">
-                        <b class="text-success">{{ user.userInfo.name }}</b>
+                    <a href="http://twitter.com/{{ user.screenName }}" target="_blank">
+                        <b class="text-success">{{ user.name }}</b>
                     </a>
-                    {% if user.userInfo.description|length > 2 %}
+                    {% if user.description|length > 2 %}
                         {{ ':' }}
                     {% endif %}
-                    {{ user.userInfo.description|safe }}</h4>
+                    {{ user.description|safe }}</h4>
                 {{ title }} : {{ user.score }}
-            {{ user.score }}
             </div>
         </li>
     {% endfor %}

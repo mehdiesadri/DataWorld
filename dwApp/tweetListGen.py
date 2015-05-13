@@ -28,7 +28,7 @@ def search_tweets(query, size):
             tweet_time = t.timestamp
             t.status.time = utilities.what_time(long(tweet_time) / 1000)
             t.status.text = utilities.text_url_to_link(t.status.text)
-            t.status.score = t.status.favoriteCount + t.status.retweetCount
+            t.status.score = t.status.favoriteCount + t.status.retweetCount * 1.5
             tweets.append(t.status)
             tweet_ids.append(t.status.id)
 

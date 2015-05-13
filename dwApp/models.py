@@ -71,9 +71,10 @@ class User(DynamicDocument):
     id = LongField(primary_key=True)
     userInfo = EmbeddedDocumentField(TUser)
     statistics = EmbeddedDocumentField(UStatistics)
+    meta = {'collection': 'user', 'strict': False}
 
 
-class RetweetedStatus(DynamicEmbeddedDocument):
+class ST(DynamicEmbeddedDocument):
     text = StringField(max_length=500)
     createdAt = DateTimeField()
     retweetCount = IntField()
@@ -81,12 +82,12 @@ class RetweetedStatus(DynamicEmbeddedDocument):
     lang = StringField(max_length=20)
     user = EmbeddedDocumentField(TUser)
     geo = StringField()
-    # mediaEntities = EmbeddedDocumentField(MediaEntities)
-    meta = {'allow_inheritance': True}
+    meta = {'allow_inheritance': True, 'strict': False}
 
 
-class Status(RetweetedStatus):
-    retweetedStatus = EmbeddedDocumentField(RetweetedStatus)
+class Status(ST):
+    retweetedStatus = EmbeddedDocumentField(ST)
+    meta = {'allow_inheritance': True, 'strict': False}
 
 
 class Tweet(DynamicDocument):
@@ -94,6 +95,7 @@ class Tweet(DynamicDocument):
     timestamp = LongField()
     relevance = FloatField()
     status = EmbeddedDocumentField(Status)
+    meta = {'strict': False}
 
 
 class Query(EmbeddedDocument):

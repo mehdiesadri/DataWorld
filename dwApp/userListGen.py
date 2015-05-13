@@ -6,11 +6,24 @@ from dwApp.models import User
 __author__ = 'mehdi'
 
 
-def generate_users(size):
-    users_temp = User.objects().order_by('-statistics__relevantTweetCount__value')[:size]
-    for user in users_temp:
-        user.score = user.statistics.relevantTweetCount.value
-    return users_temp
+def generate_most_followers_users(size):
+    temp_users = User.objects().order_by('-userInfo__followersCount')[:size]
+    users = []
+    for user in temp_users:
+        u = user.userInfo
+        u.score = user.userInfo.followersCount
+        users.append(u)
+    return users
+
+
+def generate_most_active_users(size):
+    temp_users = User.objects().order_by('-statistics__relevantTweetCount__value')[:size]
+    users = []
+    for user in temp_users:
+        u = user.userInfo
+        u.score = user.statistics.relevantTweetCount.value
+        users.append(u)
+    return users
 
 
 def generate_influential_users_academia(size):
@@ -24,10 +37,16 @@ def generate_influential_users_academia(size):
     phd = Q(userInfo__description__icontains='phd') & Q(userInfo__description__icontains='student') & Q(
         userInfo__description__icontains='data')
 
-    academics = User.objects.filter(prof | school | dept | udb | edu | phd).order_by(
+    temp_users = User.objects.filter(prof | school | dept | udb | edu | phd).order_by(
         '-statistics__relevantTweetCount__value')[:size]
 
-    return academics
+    users = []
+    for user in temp_users:
+        u = user.userInfo
+        u.score = user.statistics.relevantTweetCount.value
+        users.append(u)
+
+    return users
 
 
 def generate_influential_users_industry(size):
@@ -37,7 +56,13 @@ def generate_influential_users_industry(size):
     cto = Q(userInfo__description__icontains=' cto ') & Q(userInfo__description__icontains='data')
     founder = Q(userInfo__description__icontains='founder') & Q(userInfo__description__icontains='data')
 
-    ind = User.objects.filter(works | ent | ceo | cto | founder).order_by(
+    temp_users = User.objects.filter(works | ent | ceo | cto | founder).order_by(
         '-statistics__relevantTweetCount__value')[:size]
 
-    return ind
+    users = []
+    for user in temp_users:
+        u = user.userInfo
+        u.score = user.statistics.relevantTweetCount.value
+        users.append(u)
+
+    return users
