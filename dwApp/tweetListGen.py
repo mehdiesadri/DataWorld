@@ -20,7 +20,7 @@ def search_tweets(query, size):
     for qp in query_parts:
         q = q & Q(status__text__icontains=str(qp).strip())
 
-    tweets_temp = Tweet.objects.filter(q).order_by('-timestamp', '-status__favoriteCount', '-status__retweetCount')[
+    tweets_temp = Tweet.objects.filter(q).order_by('-timestamp', '-status__retweetCount', '-status__favoriteCount')[
                   :size]
 
     for t in tweets_temp:
@@ -53,8 +53,9 @@ def generate_tweets_geo(size):
 def generate_tweets_media(size):
     tweets = []
     tweet_ids = []
-    tweets_temp = Tweet.objects(relevance__gte=0.4, status__mediaEntities__exists=True).order_by(
+    tweets_temp = Tweet.objects(status__mediaEntities__exists=True).order_by(
         '-timestamp',
+        '-relevance',
         '-status__retweetCount', '-status__favoriteCount')[:size]
 
     for t in tweets_temp:
@@ -73,8 +74,8 @@ def generate_tweets_media(size):
 def generate_emerging_tweets(size):
     tweets = []
     tweet_ids = []
-    tweets_temp = Tweet.objects(relevance__gte=0.8, status__retweetedStatus__exists=True).order_by('-timestamp',
-                                                                                                   '-status__retweetCount')[
+    tweets_temp = Tweet.objects(status__retweetedStatus__exists=True).order_by('-relevance', '-timestamp',
+                                                                               '-status__retweetCount')[
                   :size * 2]
 
     for t in tweets_temp:
@@ -94,12 +95,14 @@ def generate_emerging_tweets(size):
 def generate_hot_tweets(size):
     tweets = []
     tweet_ids = []
-    tweets_temp = Tweet.objects(relevance__gte=0.8, status__retweetedStatus__exists=True).order_by(
-        '-status__retweetedStatus__retweetCount', '-status__retweetedStatus__favoriteCount')[:size * 2]
+    tweets_temp = Tweet.objects(status__retweetedStatus__exists=True).order_by('-relevance',
+                                                                               '-status__retweetedStatus__retweetCount',
+                                                                               '-status__retweetedStatus__favoriteCount')[
+                  :size * 2]
 
-    tweets_temp2 = Tweet.objects(relevance__gte=0.8, status__retweetedStatus__exists=True).order_by(
-        '-status__retweetedStatus__retweetCount', '-status__retweetedStatus__favoriteCount')[:size * 2].distinct(
-        'status__retweetedStatus')
+    # tweets_temp2 = Tweet.objects(relevance__gte=0.8, status__retweetedStatus__exists=True).order_by(
+    # '-status__retweetedStatus__retweetCount', '-status__retweetedStatus__favoriteCount')[:size * 2].distinct(
+    #     'status__retweetedStatus')
 
     for t in tweets_temp:
         retweetedStatus = t.status.retweetedStatus

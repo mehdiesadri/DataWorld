@@ -4,7 +4,7 @@
 <div class="special">
     {% include "wordcloud.html" with list=term_counts %}
     <div id="wordcloud" style="width: inherit; height: 150px;"></div>
-    <div class="caption">Word Cloud of the most frequent words in the last hour of tweet acquisition.</div>
+    <div class="caption">Word Cloud of the most frequent words in the last 24 hours of tweet acquisition.</div>
 </div>
 
 {% for t in geo %}

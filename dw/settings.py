@@ -66,8 +66,6 @@ DATABASES = {
 _MONGODB_NAME = 'dataworld'
 _MONGODB_HOST = 'sensoria.ics.uci.edu'
 _MONGODB_PORT = 27017
-# _MONGODB_USER = 'msadri'
-# _MONGODB_PASS = '1365918Ms2'
 
 mongoengine.connect(_MONGODB_NAME, host=_MONGODB_HOST, port=_MONGODB_PORT)
 

@@ -9,10 +9,11 @@ import tweetListGen
 import userListGen
 import time
 from mongoengine import *
+import json
 
 
 def get_terms():
-    reports = Report.objects().order_by('-startTime')[:100]
+    reports = Report.objects().order_by('-startTime')[:24]
     term_counts = {}
 
     for report in reports:
@@ -36,6 +37,29 @@ def get_terms():
     return term_counts
 
 
+def get_term_trend(term):
+    result = []
+    reports = Report.objects().order_by('-startTime')[:100]
+    for report in reports:
+        tcount = report.statistics.totalTweetCount.value
+        starttime = report.startTime
+
+        frequent_patterns = report.statistics.relevantPatterns
+        frequent_hashtags = report.statistics.relevantHashtags
+        count = 0
+        if not frequent_patterns is None and frequent_patterns.has_key(term):
+            count += frequent_patterns[term]
+        if not frequent_hashtags is None and frequent_hashtags.has_key(term):
+            count += frequent_hashtags[term]
+
+    # if term in frequent_patterns or term in frequent_hashtags:
+    # freq = float(wc.get(term)) / float(report.tweet_count)
+    # result.append([-indx, freq])
+    # else:
+    # result.append([-indx, float(0)])
+    return result
+
+
 def generate_user_lists(ucount):
     u_count = userListGen.generate_most_active_users(ucount)
     u_follower_count = userListGen.generate_most_followers_users(ucount)
@@ -50,7 +74,7 @@ def index(request):
     term_counts = get_terms()
 
     t_media = tweetListGen.generate_tweets_media(20)
-    # t_geo = tweetListGen.generate_tweets_geo(50)
+    # # t_geo = tweetListGen.generate_tweets_geo(50)
     t_emerging = tweetListGen.generate_emerging_tweets(10)
     t_hot = tweetListGen.generate_hot_tweets(10)
     t_geo = []
@@ -95,7 +119,7 @@ def htweets(request):
 def gtweets(request, query):
     title = 'Tweets: ' + query
     tweets = tweetListGen.search_tweets(query, 500)
-    # trend = get_term_trend(query)
+    trend = get_term_trend(query)
     trend = {}
     t = get_template("tweets.html")
     html = t.render(Context({'title': title, 't_list': tweets, 'trend': trend}))
@@ -104,7 +128,7 @@ def gtweets(request, query):
 
 
 def users(request):
-    count = 200
+    count = 500
     title = 'Influential Users'
 
     u_academia, u_count, u_follower_count, u_industry = generate_user_lists(count)

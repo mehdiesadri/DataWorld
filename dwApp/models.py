@@ -8,15 +8,10 @@ class Counter(DynamicEmbeddedDocument):
 class Statistics(DynamicEmbeddedDocument):
     relevantPatterns = StringField()
     relevantHashtags = StringField()
-    # totalTweetCount =
-    # relevantTweetCount =
-    # irrelevantTweetCount =
-    # neutralTweetCount =
-    # deltaTweetCount =
-    # addedPhraseCount =
-    # removedPhraseCount =
-    # generalizedPhraseCount =
-    # specializedPhraseCount =
+    totalTweetCount = EmbeddedDocumentField(Counter)
+    relevantTweetCount = EmbeddedDocumentField(Counter)
+    irrelevantTweetCount = EmbeddedDocumentField(Counter)
+    neutralTweetCount = EmbeddedDocumentField(Counter)
     avgRelevance = FloatField()
     maxRelevance = FloatField()
     minRelevance = FloatField()

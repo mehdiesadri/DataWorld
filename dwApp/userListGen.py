@@ -55,8 +55,15 @@ def generate_influential_users_industry(size):
     ceo = Q(userInfo__description__icontains=' ceo ') & Q(userInfo__description__icontains='data')
     cto = Q(userInfo__description__icontains=' cto ') & Q(userInfo__description__icontains='data')
     founder = Q(userInfo__description__icontains='founder') & Q(userInfo__description__icontains='data')
+    topcomp = (Q(userInfo__description__icontains='google') | Q(userInfo__description__icontains='facebook') | Q(
+        userInfo__description__icontains='twitter') | Q(userInfo__description__icontains='instagram') | Q(
+        userInfo__description__icontains='yelp') | Q(
+        userInfo__description__icontains='yahoo') | Q(userInfo__description__icontains='microsoft') | Q(
+        userInfo__description__icontains='cloudera')) & ( Q(userInfo__description__icontains='scientist') | Q(
+        userInfo__description__icontains='engineer') | Q(
+        userInfo__description__icontains='manager'))
 
-    temp_users = User.objects.filter(works | ent | ceo | cto | founder).order_by(
+    temp_users = User.objects.filter(works | ent | ceo | cto | founder | topcomp).order_by(
         '-statistics__relevantTweetCount__value')[:size]
 
     users = []
