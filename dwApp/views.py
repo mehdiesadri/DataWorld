@@ -71,12 +71,13 @@ def generate_user_lists(ucount):
 
 def index(request):
     title = 'DataWorld'
-    term_counts = get_terms()
+    term_counts = get_terms().items()
 
     t_media = tweetListGen.generate_tweets_media(20)
-    # # t_geo = tweetListGen.generate_tweets_geo(50)
+    # t_geo = tweetListGen.generate_tweets_geo(50)
     t_emerging = tweetListGen.generate_emerging_tweets(10)
     t_hot = tweetListGen.generate_hot_tweets(10)
+    # t_hot=[]
     t_geo = []
 
     u_academia, u_count, u_follower_count, u_industry = generate_user_lists(5)

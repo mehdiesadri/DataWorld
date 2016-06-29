@@ -95,17 +95,20 @@ def generate_emerging_tweets(size):
 def generate_hot_tweets(size):
     tweets = []
     tweet_ids = []
-    tweets_temp = Tweet.objects(status__retweetedStatus__exists=True).order_by('-relevance',
-                                                                               '-status__retweetedStatus__retweetCount',
-                                                                               '-status__retweetedStatus__favoriteCount')[
-                  :size * 2]
+    tweets_temp = Tweet.objects().order_by('-relevance',
+                                           '-status__retweetedStatus__retweetCount',
+                                           '-status__retweetedStatus__favoriteCount')[
+                  :size * 2].distinct(field="status")
 
     # tweets_temp2 = Tweet.objects(relevance__gte=0.8, status__retweetedStatus__exists=True).order_by(
     # '-status__retweetedStatus__retweetCount', '-status__retweetedStatus__favoriteCount')[:size * 2].distinct(
-    #     'status__retweetedStatus')
+    # 'status__retweetedStatus')
 
     for t in tweets_temp:
-        retweetedStatus = t.status.retweetedStatus
+        if hasattr(t, 'status') and hasattr(t.status, 'retweetedStatus'):
+            retweetedStatus = t.status.retweetedStatus
+        else:
+            continue
         if not tweet_ids.__contains__(retweetedStatus.id):
             retweetedStatus.time = utilities.what_time(int(t.timestamp))
             retweetedStatus.text = utilities.text_url_to_link(retweetedStatus.text)

@@ -1,6 +1,6 @@
 <script type="text/javascript">
     var word_array = [
-        {% for term, count in list.items %}
+        {% for term, count in list %}
             {text: "{{ term }}", weight: {{ count }}, link: {href: "{% url 'gt' term %}", target: "_blank"}, html: {title: "{{term}} : {{count}}"}},
         {% endfor %}
     ];
