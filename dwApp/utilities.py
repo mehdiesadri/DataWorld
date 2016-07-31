@@ -52,6 +52,25 @@ def text_url_to_link(input):
     return output
 
 
+def highlight_entities(text, ents):
+    output = text
+    for e in ents:
+        valid = True
+        for e_compare in ents:
+            if e != e_compare and e in e_compare:
+                valid = False
+                break
+        if not valid:
+            continue
+        artId = ents[e][0]
+        artTitle = ents[e][1]
+        artScore = ents[e][2]
+        new_e = ' <a class="text-warning" target="_blank" title="' + artTitle + ' - ' + artScore + '" href="https://en.wikipedia.org/?curid=' + artId + '">#####</a> '
+        if e is not None and output is not None:
+            output = fuzzy_replace(e, new_e, output)
+    return output
+
+
 def text_remove_url(input):
     output = ''
     s = input
@@ -88,3 +107,14 @@ def what_time(t):
         return str(int(diff / (7 * 24 * 3600))) + 'w'
     else:
         return str(int(diff / (30 * 24 * 3600))) + 'mo'
+
+
+def fuzzy_replace(str_a, str_b, orig_str):
+    pattern = str(str_a).replace(",", ".{1,15}")
+    index = re.search(pattern, orig_str, re.IGNORECASE)
+    if index is None:
+        return orig_str
+    str_b = str_b.replace("#####", index.group(0))
+    output = re.sub(pattern, str_b, orig_str, flags=re.IGNORECASE)
+    return output
+

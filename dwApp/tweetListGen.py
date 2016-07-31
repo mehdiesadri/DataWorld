@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.contrib.gis.gdal import field
-
 from mongoengine.queryset.visitor import Q
 from dwApp.models import Tweet
 import dateutil.parser
@@ -79,10 +77,12 @@ def generate_emerging_tweets(size):
                   :size * 2]
 
     for t in tweets_temp:
+        ents = assign_entities(t)
         retweetedStatus = t.status.retweetedStatus
         if retweetedStatus is not None and not tweet_ids.__contains__(retweetedStatus.id):
             retweetedStatus.time = utilities.what_time(int(t.timestamp))
             retweetedStatus.text = utilities.text_url_to_link(retweetedStatus.text)
+            retweetedStatus.text = utilities.highlight_entities(retweetedStatus.text, ents)
             retweetedStatus.score = retweetedStatus.retweetCount * 1.5 + retweetedStatus.favoriteCount
             retweetedStatus.relevance = t.relevance
             tweets.append(retweetedStatus)
@@ -95,23 +95,18 @@ def generate_emerging_tweets(size):
 def generate_hot_tweets(size):
     tweets = []
     tweet_ids = []
-    tweets_temp = Tweet.objects().order_by('-relevance',
-                                           '-status__retweetedStatus__retweetCount',
-                                           '-status__retweetedStatus__favoriteCount')[
-                  :size * 2].distinct(field="status")
-
-    # tweets_temp2 = Tweet.objects(relevance__gte=0.8, status__retweetedStatus__exists=True).order_by(
-    # '-status__retweetedStatus__retweetCount', '-status__retweetedStatus__favoriteCount')[:size * 2].distinct(
-    # 'status__retweetedStatus')
+    tweets_temp = Tweet.objects(status__retweetedStatus__exists=True).order_by('-relevance',
+                                                                               '-status__retweetedStatus__retweetCount',
+                                                                               '-status__retweetedStatus__favoriteCount')[
+                  :size * 5]
 
     for t in tweets_temp:
-        if hasattr(t, 'status') and hasattr(t.status, 'retweetedStatus'):
-            retweetedStatus = t.status.retweetedStatus
-        else:
-            continue
+        ents = assign_entities(t)
+        retweetedStatus = t.status.retweetedStatus
         if not tweet_ids.__contains__(retweetedStatus.id):
             retweetedStatus.time = utilities.what_time(int(t.timestamp))
             retweetedStatus.text = utilities.text_url_to_link(retweetedStatus.text)
+            retweetedStatus.text = utilities.highlight_entities(retweetedStatus.text, ents)
             retweetedStatus.score = retweetedStatus.retweetCount * 1.5 + retweetedStatus.favoriteCount
             retweetedStatus.relevance = t.relevance
             tweets.append(retweetedStatus)
@@ -120,3 +115,20 @@ def generate_hot_tweets(size):
     tweets = sorted(tweets, key=lambda k: k.score * k.relevance, reverse=True)
     return tweets
 
+
+def assign_entities(t):
+    ents = {}
+    for e in t.entities:
+        val = t.entities[e].split('\t')[1].split(",")
+        if len(val) < 1:
+            continue
+        i = 0
+        first = val[i]
+        first_parts = first.split("~~")
+        while (len(first_parts) < 3):
+            i = i + 1
+            first = first + "," + val[i]
+            first_parts = first.split("~~")
+        if float(first_parts[2]) >= 1:
+            ents[e] = first_parts
+    return ents

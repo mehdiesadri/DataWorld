@@ -39,8 +39,8 @@ def get_terms():
 
 def get_term_trend(term):
     result = []
-    reports = Report.objects().order_by('-startTime')[:100]
-    for report in reports:
+    reports = Report.objects().order_by('-startTime')[:10]
+    for indx, report in enumerate(reports):
         tcount = report.statistics.totalTweetCount.value
         starttime = report.startTime
 
@@ -52,11 +52,13 @@ def get_term_trend(term):
         if not frequent_hashtags is None and frequent_hashtags.has_key(term):
             count += frequent_hashtags[term]
 
-    # if term in frequent_patterns or term in frequent_hashtags:
-    # freq = float(wc.get(term)) / float(report.tweet_count)
-    # result.append([-indx, freq])
-    # else:
-    # result.append([-indx, float(0)])
+        if term in frequent_patterns or term in frequent_hashtags:
+            freq = float(count) / float(tcount)
+            # freq = float(wc.get(term)) / float(report.tweet_count)
+            result.append([-indx, freq])
+        else:
+            result.append([-indx, float(0)])
+
     return result
 
 
@@ -121,7 +123,7 @@ def gtweets(request, query):
     title = 'Tweets: ' + query
     tweets = tweetListGen.search_tweets(query, 500)
     trend = get_term_trend(query)
-    trend = {}
+    # trend = {}
     t = get_template("tweets.html")
     html = t.render(Context({'title': title, 't_list': tweets, 'trend': trend}))
 

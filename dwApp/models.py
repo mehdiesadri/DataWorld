@@ -90,6 +90,7 @@ class Tweet(DynamicDocument):
     timestamp = LongField()
     relevance = FloatField()
     status = EmbeddedDocumentField(Status)
+    entities = DictField()
     meta = {'strict': False}
 
 
